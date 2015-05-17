@@ -43,7 +43,7 @@ mina sidekiq:start                   # Start sidekiq
 mina sidekiq:stop                    # Stop sidekiq
 ```
 
-#### Install
+#### Install gems
 
 Add gems to Gemfile.
 
@@ -88,7 +88,7 @@ gpasswd -a deployer sudo
 echo "deployer ALL=(ALL:ALL) ALL" >> /etc/sudoers
 ```
 
-#### Install everything.
+#### Install everything onto the server
 
 Modify `deploy/templates` as needed.
 
