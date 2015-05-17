@@ -68,6 +68,8 @@ Set ENV variables in Figaro's `config/application.yml`.
 figaro install
 ```
 
+#### Install recipes
+
 Copy the recipes into your rails app config directory.
 
 ```bash
@@ -86,7 +88,7 @@ gpasswd -a deployer sudo
 echo "deployer ALL=(ALL:ALL) ALL" >> /etc/sudoers
 ```
 
-#### Install everything. 
+#### Install everything.
 
 Modify `deploy/templates` as needed.
 
