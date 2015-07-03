@@ -3,7 +3,7 @@ upstream <%= app_name %> {
 }
 
 server {
-  listen 3000 default deferred;
+  listen 80 default deferred;
   root <%= "#{deploy_to}/current" %>/public;
 
   location ^~ /assets/ {

@@ -7,8 +7,7 @@ preload_app!
 daemonize
 
 rackup      DefaultRackup
-port        ENV["PORT"]      || 3000
-environment ENV["RAILS_ENV"] || "development"
+environment ENV["RAILS_ENV"] || "production"
 
 bind "unix:<%= "#{deploy_to}/#{shared_path}" %>/tmp/sockets/puma.sock"
 pidfile "<%= "#{deploy_to}/#{shared_path}" %>/tmp/pids/puma.pid"
