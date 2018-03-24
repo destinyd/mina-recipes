@@ -1,8 +1,8 @@
 production:
   adapter: postgresql
   encoding: unicode
-  database: <%= pg_database %>
+  database: <%= fetch(:app_name) %>_production
   pool: 5
-  username: <%= pg_user %>
-  password: <%= pg_password %>
-  host: <%= pg_host %>
+  username: <%= fetch(:app_name) %>
+  password: <%= fetch(:pg_password) %>
+  host: <%= fetch(:pg_host) %>

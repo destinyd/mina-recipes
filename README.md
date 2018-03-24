@@ -1,6 +1,8 @@
 Mina-Recipes
 ============
 
+**In progress of updating to Mina 1.2+**
+
 Deploy to a vps with [mina](https://github.com/mina-deploy/mina), [rails](https://github.com/rails/rails), [puma](https://github.com/puma/puma), [nginx](https://github.com/nginx/nginx), [rbenv](https://github.com/sstephenson/rbenv), [redis](https://github.com/redis), [figaro](https://github.com/laserlemon/figaro) and [sidekiq](https://github.com/mperham/sidekiq)!
 
 #### Available tasks
@@ -50,7 +52,6 @@ Add gems to Gemfile.
 ```ruby
 gem 'figaro'
 gem 'mina'
-gem 'puma'
 gem 'sidekiq'
 gem 'highline',  require: false
 gem 'mina-puma', require: false

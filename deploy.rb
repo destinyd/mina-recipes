@@ -1,3 +1,4 @@
+# Mina
 require 'mina/bundler'
 require 'mina/rails'
 require 'mina/git'
@@ -5,66 +6,51 @@ require 'mina/rbenv'
 require 'mina/puma'
 require 'mina/scp'
 
-### Needed to ask for postgresql password
+# Highline for `ask`
 require 'highline/import'
 
-###
-### TASKS
-################################################################################
-
+# Tasks
 require_relative 'deploy/essentials'
 require_relative 'deploy/setup'
 require_relative 'deploy/imagemagick'
 require_relative 'deploy/postgresql'
 require_relative 'deploy/nodejs'
-require_relative 'deploy/redis'
 require_relative 'deploy/rbenv'
 require_relative 'deploy/puma'
 require_relative 'deploy/nginx'
 require_relative 'deploy/secrets'
-require_relative 'deploy/sidekiq'
 
-###
-### SERVER
-################################################################################
+# SSH
+set :user, 'deployer'
+set :domain, '0.0.0.0'
+# AWS
+set :identity_file, 'app.pem'
+# VPS
+# set :forward_agent, true
 
-set :domain,                '104.236.8.190'                       # Server ip or domain
-set :user,                  'deployer'                            # Server user
-set :forward_agent,          true                                 # SSH key
+# App
+set :app_name, 'app'
+set :template_path, File.join('config', 'deploy', 'templates')
 
-set :app_name,              'tickets'                             # App name
+# Deploy
+set :deploy_to, "/home/#{fetch(:user)}/#{fetch(:app_name)}"
+set :shared_dirs, fetch(:shared_dirs, []).push('log', 'tmp')
+set :shared_files, fetch(:shared_files, []).push('config/database.yml', 'config/application.yml', 'config/secrets.yml')
 
-set :app_root,              '/Users/codyeatworld/rails/tickets'   # Local path to application
-set :template_path,         "#{app_root}/config/deploy/templates" # Local path to deploy templates
+# Repository
+set :repository, 'git://github.com/username/repo'
+set :branch, 'master'
 
-set :deploy_to,             "/home/#{user}/#{app_name}"           # Where to deploy
-
-set :repository,            'git://github.com/ctrl-alt/tickets'   # What to deploy
-set :branch,                'master'                              # Which branch to deploy
-
-set :shared_paths,          ['config/database.yml',               # Database config
-                             'config/application.yml',            # Figaro variables
-                             'config/secrets.yml',                # Rails secrets
-                             'public/uploads',                    # Image uploads
-                             'log',                               # Log files
-                             'tmp'
-                            ]
-
-### Load rbenv into the session
+# Enviroment
+desc 'Load the enviroment.'
 task :environment do
   invoke :'rbenv:load'
 end
 
-###
-### MINA DEPLOY
-################################################################################
-
-desc "Deploys the current version to the server."
-task deploy: :environment do
-  to :before_hook do
-    # Put things to run locally before ssh
-  end
-
+# mina deploy
+desc 'Deploys the current version to the server.'
+task :deploy do
+  # Deployment tasks
   deploy do
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
@@ -72,11 +58,11 @@ task deploy: :environment do
     invoke :'rails:db_migrate'
     invoke :'rails:assets_precompile'
     invoke :'deploy:cleanup'
-    invoke :'secrets:upload'
 
-    to :launch do
+    # After deploy
+    on :launch do
       invoke :'puma:restart'
-      invoke :'sidekiq:start'
+      invoke :'nginx:restart'
     end
   end
 end

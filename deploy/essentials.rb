@@ -1,12 +1,9 @@
-###
-### ESSENTIALS
-################################################################################
-
+# Essentials
 namespace :provision do
-  desc "Install the essentials"
+  desc "Install essential packages required for building ruby and git."
   task :essentials do
-    queue "sudo apt-get update -y"
-    queue "sudo apt-get install -y git-core curl wget zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev software-properties-common"
-    queue "sudo apt-get clean -y"
+    command "sudo apt-get update -y"
+    command "sudo apt-get install -y autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm3 libgdbm-dev"
+    command "sudo apt-get clean -y"
   end
 end

@@ -1,29 +1,30 @@
-###
-### NGINX
-################################################################################
+# nginx
 
 namespace :nginx do
   %w(stop start restart reload status).each do |action|
     desc "#{action.capitalize} NGINX"
     task action.to_sym => :environment do
-      queue  %(echo "-----> #{action.capitalize} NGINX")
-      queue "sudo service nginx #{action}"
+      # Log the command to the terminal output.
+      command  %(echo "-----> #{action.capitalize} NGINX")
+      # Run the command.
+      command "sudo service nginx #{action}"
     end
   end
 end
 
+# Install nginx server.
 namespace :provision do
   desc "Install NGINX"
   task :nginx do
-    queue "sudo add-apt-repository -y ppa:nginx/stable"
-    queue "sudo apt-get update -y"
-    queue "sudo apt-get install -y nginx"
-    queue "sudo apt-get clean -y"
+    command "sudo apt-get update -y"
+    command "sudo apt-get install -y nginx"
+    command "sudo apt-get clean -y"
 
-    nginx_puma = erb("#{template_path}/nginx_puma.erb")
+    # Create nginx server file.
+    nginx_puma = erb("#{fetch(:template_path)}/nginx_puma.erb")
 
-    queue %[echo '#{nginx_puma}' > /home/#{user}/nginx_conf]
-    queue %[sudo mv /home/#{user}/nginx_conf /etc/nginx/sites-enabled/#{app_name}]
-    queue %[sudo rm -f /etc/nginx/sites-enabled/default]
+    command %[echo '#{nginx_puma}' > /home/#{fetch(:user)}/nginx_conf]
+    command %[sudo mv /home/#{fetch(:user)}/nginx_conf /etc/nginx/sites-enabled/#{fetch(:app_name)}]
+    command %[sudo rm -f /etc/nginx/sites-enabled/default]
   end
 end

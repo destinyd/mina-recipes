@@ -1,10 +1,8 @@
-###
-### SECRETS
-################################################################################
-
+# Secrets
+# TODO: Don't use exec
 namespace :secrets do
-  desc "Upload secret configuration files"
+  desc 'Upload secret configuration files.'
   task :upload do
-    scp_upload("#{app_root}/config/{application,secrets}.yml", "#{deploy_to}/#{shared_path}/config/", verbose: true)
+    exec "scp -i #{fetch(:identity_file)} #{fetch(:app_root)}/config/{application,secrets}.yml  #{file} #{fetch(:user)}@#{fetch(:domain)}:#{fetch(:shared_path)}/config/"
   end
 end

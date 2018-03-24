@@ -1,18 +1,21 @@
-###
-### RBENV
-################################################################################
+# rbenv
+# TODO: Disble enviorment task preload
 
-set :ruby_version,         '2.2.2'
+# Ruby version to install
+set :ruby_version, '2.5.0'
 
 namespace :provision do
-  desc "Install ruby #{ruby_version} with rbenv"
+  desc "Install ruby #{fetch(:ruby_version)} with rbenv"
   task :rbenv do
-    queue "curl -L https://raw.github.com/fesplugas/rbenv-installer/master/bin/rbenv-installer | bash"
+    command "git clone https://github.com/rbenv/rbenv.git ~/.rbenv"
+    command "git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build"
+
+    # Load enviorment manually
     invoke :'rbenv:load'
-    queue "rbenv install #{ruby_version}"
-    queue "rbenv global #{ruby_version}"
-    queue "echo 'gem: --no-ri --no-rdoc' > ~/.gemrc"
-    queue "gem install bundler"
-    queue "rbenv rehash"
+    command "rbenv install #{fetch(:ruby_version)}"
+    command "rbenv global #{fetch(:ruby_version)}"
+    command "echo 'gem: --no-ri --no-rdoc' > ~/.gemrc"
+    command "gem install bundler"
+    command "rbenv rehash"
   end
 end
