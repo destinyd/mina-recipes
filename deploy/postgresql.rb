@@ -14,8 +14,6 @@ namespace :provision do
 
     command "sudo yum install https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-redhat96-9.6-3.noarch.rpm"
     command "sudo yum install postgresql96-server postgresql96-devel"
-    command "sudo systemctl enable postgresql-9.6"
-    command "sudo systemctl start postgresql-9.6"
 
     command "/usr/pgsql-9.6/bin/postgresql96-setup initdb"
 
@@ -25,5 +23,8 @@ namespace :provision do
 
     database_yml = erb("#{fetch(:template_path)}/postgresql.yml.erb")
     command "echo '#{database_yml}' > #{fetch(:shared_path)}/config/database.yml"
+
+    command "sudo systemctl enable postgresql-9.6"
+    command "sudo systemctl start postgresql-9.6"
   end
 end
