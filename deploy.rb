@@ -24,7 +24,7 @@ require_relative 'deploy/secrets'
 set :user, 'deployer'
 set :domain, '0.0.0.0'
 # AWS
-set :identity_file, 'app.pem'
+# set :identity_file, 'app.pem'
 # VPS
 # set :forward_agent, true
 
@@ -40,6 +40,8 @@ set :shared_files, fetch(:shared_files, []).push('config/database.yml', 'config/
 # Repository
 set :repository, 'git://github.com/username/repo'
 set :branch, 'master'
+
+set :bundle_bin, "~/.rbenv/shims/bundle"
 
 # Enviroment
 desc 'Load the enviroment.'
