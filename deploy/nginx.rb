@@ -34,6 +34,7 @@ namespace :provision do
     # TODO 
     # 因为centos nginx没有加载site-enabled/*，
     # 运行之前还要修改，/etc/nginx/nginx.conf，具体参看对应文字介绍
+    # https://juejin.im/post/5b5b01d6f265da0fa21a90c4
 
     # 启动nginx服务
     command "sudo systemctl start nginx"

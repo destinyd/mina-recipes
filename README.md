@@ -3,7 +3,12 @@ Mina-Recipes
 
 **In progress of updating to Mina 1.2+**
 
-Deploy to a vps with [mina](https://github.com/mina-deploy/mina), [rails](https://github.com/rails/rails), [puma](https://github.com/puma/puma), [nginx](https://github.com/nginx/nginx), [rbenv](https://github.com/sstephenson/rbenv), [redis](https://github.com/redis), [figaro](https://github.com/laserlemon/figaro) and [sidekiq](https://github.com/mperham/sidekiq)!
+Deploy to a vps with [mina](https://github.com/mina-deploy/mina), [rails](https://github.com/rails/rails), [puma](https://github.com/puma/puma), [nginx](https://github.com/nginx/nginx), [rbenv](https://github.com/sstephenson/rbenv)
+
+## 中文说明
+[请点我查看说明](https://juejin.im/post/5b5b01d6f265da0fa21a90c4)
+
+本 repo 是为 CentOS 7 做了调整的版本，请不要尝试在 Ubuntu 服务器上部署。
 
 #### Available tasks
 
@@ -50,23 +55,10 @@ mina sidekiq:stop                    # Stop sidekiq
 Add gems to Gemfile.
 
 ```ruby
-gem 'figaro'
 gem 'mina'
-gem 'sidekiq'
 gem 'highline',  require: false
 gem 'mina-puma', require: false
 gem 'mina-scp',  require: false
-```
-
-#### Install Figaro 
-
-[Learn more about Figaro at laserlemon/figaro](https://github.com/laserlemon/figaro)
-
-Your `config/secrets.yml` should reference values with `ENV['secret_key_base']`.
-Set ENV variables in Figaro's `config/application.yml`.
-
-```bash
-figaro install
 ```
 
 #### Install recipes
@@ -80,13 +72,14 @@ cp -R mina-recipes/deploy* path/to/rails/config
 
 #### Deployer
 
-Setup deployer on a Ubuntu 14.04 server and update `deploy.rb` with your servers configuration.
+Setup deployer on a CentOS 7 server and update `deploy.rb` with your servers configuration.
 
 ```bash
 ssh root@domain.com
 adduser deployer
-gpasswd -a deployer sudo
-echo "deployer ALL=(ALL:ALL) ALL" >> /etc/sudoers
+gpasswd -a deployer wheel # 添加到sudo租
+passwd deployer # 设置密码
+echo "deployer ALL = (ALL) NOPASSWD: ALL" >> /etc/sudoers
 ```
 
 #### Install everything onto the server
@@ -96,11 +89,11 @@ Modify `deploy/templates` as needed.
 ```bash
 mina setup
 mina provision:essentials
-mina provision:imagemagick
+# mina provision:imagemagick
 mina provision:nginx
-mina provision:nodejs
+# mina provision:nodejs
 mina provision:postgresql
-mina provision:redis
+# mina provision:redis
 mina provision:rbenv
 mina puma:config
 ```
